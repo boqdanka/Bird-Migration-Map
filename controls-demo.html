@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nodes &amp; Paths · host-controlled demo</title>
+<style>
+  html,body{margin:0;height:100%;font:14px/1.4 system-ui,sans-serif;background:#f3f3f1;color:#1f1f1f}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;height:100%}
+  #app{height:100%;min-height:0}
+  aside{overflow:auto;padding:14px;border-left:1px solid #d7d7d3;background:#fff}
+  h2{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#777;margin:18px 0 6px}
+  label{display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center;margin-bottom:8px}
+  label>span{grid-column:1/-1;color:#555;font-size:12px}
+  input[type=range]{width:100%;grid-column:1/-1}
+  input[type=text],input[type=number],select,textarea{width:100%;box-sizing:border-box;grid-column:1/-1;padding:5px 6px}
+  .row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  button{padding:6px 10px}
+  output{font-variant-numeric:tabular-nums;color:#777}
+</style>
+</head>
+<body>
+<div class="layout">
+  <div id="app"></div>
+  <aside id="panel"></aside>
+</div>
+<script type="module">
+  // The host platform supplies the controls. The tool's own UI is hidden (ui: 'none').
+  import { mount } from './tool.js';
+  const panel = document.getElementById('panel');
+  const tool = window.tool = mount(document.getElementById('app'), { ui: 'none', preset: 'poster' });
+
+  function build() {
+    panel.innerHTML = '';
+    const bar = document.createElement('div'); bar.className = 'row';
+    tool.presets.forEach(p => { const b = document.createElement('button'); b.textContent = p; b.onclick = () => { tool.loadPreset(p); build(); }; bar.appendChild(b); });
+    panel.appendChild(bar);
+    const bar2 = document.createElement('div'); bar2.className = 'row';
+    [['Play', () => tool.play()], ['Pause', () => tool.pause()], ['Replay', () => tool.replay()],
+     ['Save PNG', async () => { const b = await tool.exportPng(2); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'poster.png'; a.click(); }]
+    ].forEach(([t, f]) => { const b = document.createElement('button'); b.textContent = t; b.onclick = f; bar2.appendChild(b); });
+    panel.appendChild(bar2);
+
+    let group = '';
+    tool.params().forEach(p => {
+      if (p.group !== group) { group = p.group; const h = document.createElement('h2'); h.textContent = group; panel.appendChild(h); }
+      const l = document.createElement('label'); const s = document.createElement('span'); s.textContent = p.label; l.appendChild(s);
+      let el;
+      if (p.type === 'select') {
+        el = document.createElement('select');
+        p.options.forEach(o => { const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; el.appendChild(op); });
+      } else if (p.type === 'textarea') { el = document.createElement('textarea'); el.rows = 3; }
+      else { el = document.createElement('input'); el.type = p.type === 'checkbox' ? 'checkbox' : p.type === 'range' ? 'range' : p.type === 'color' ? 'color' : p.type === 'number' ? 'number' : 'text'; }
+      if (p.min != null) el.min = p.min; if (p.max != null) el.max = p.max; if (p.step != null) el.step = p.step;
+      if (p.type === 'checkbox') el.checked = !!p.value; else el.value = p.value;
+      el.dataset.id = p.id;
+      const ev = (p.type === 'select' || p.type === 'checkbox') ? 'change' : 'input';
+      el.addEventListener(ev, () => {
+        const v = p.type === 'checkbox' ? el.checked : el.value;
+        tool.set(p.id, v);
+        if (p.id === 'format' || p.id === 'palette') build();
+      });
+      l.appendChild(el); panel.appendChild(l);
+    });
+  }
+  build();
+</script>
+</body>
+</html>

@@ -1,0 +1,2601 @@
+{
+ "tool": "Nodes & Paths",
+ "version": "1.1.0",
+ "usage": {
+  "mount": "mod.mount(host, { ui: false, persist: false })",
+  "setValue": "api.set(id, value)   // or api.setMany({id: value, ...})",
+  "button": "api.action(action, argument?)   // control ids are 'act_' + action",
+  "data": "api.setData('3, 8, 5, 12')   // number series -> nodes",
+  "frame": "api.snapshotSvg(fontCss?)   // current animated frame as an SVG string",
+  "dynamic": [
+   "bg.stopN.color / bg.stopN.pos : one pair per background gradient stop (N = 1..stops)",
+   "<role>.* : text blocks that have a control id. The poster example has title, subtitle, footer, tag. Users add more in the tool (Poster > Selected text > Control id), then call api.params() again."
+  ]
+ },
+ "controls": [
+  {
+   "id": "format",
+   "label": "Format",
+   "group": "Poster",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "full",
+     "label": "Full canvas"
+    },
+    {
+     "value": "p45",
+     "label": "Poster 4:5 (1080×1350)"
+    },
+    {
+     "value": "p11",
+     "label": "Square 1:1 (1080×1080)"
+    },
+    {
+     "value": "p916",
+     "label": "Story 9:16 (1080×1920)"
+    },
+    {
+     "value": "p169",
+     "label": "Wide 16:9 (1920×1080)"
+    }
+   ],
+   "default": "p45"
+  },
+  {
+   "id": "bgType",
+   "label": "Background",
+   "group": "Poster",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "gradient",
+     "label": "Gradient"
+    },
+    {
+     "value": "solid",
+     "label": "Solid colour"
+    },
+    {
+     "value": "none",
+     "label": "None"
+    }
+   ],
+   "default": "gradient"
+  },
+  {
+   "id": "bgAngle",
+   "label": "Gradient angle",
+   "group": "Poster",
+   "type": "range",
+   "min": 0,
+   "max": 360,
+   "step": 5,
+   "options": null,
+   "default": 180
+  },
+  {
+   "id": "bg.stop1.color",
+   "label": "Stop 1 colour",
+   "group": "Poster · gradient stops",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ff8f44"
+  },
+  {
+   "id": "bg.stop1.pos",
+   "label": "Stop 1 position, %",
+   "group": "Poster · gradient stops",
+   "type": "range",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "bg.stop2.color",
+   "label": "Stop 2 colour",
+   "group": "Poster · gradient stops",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#94b3c3"
+  },
+  {
+   "id": "bg.stop2.pos",
+   "label": "Stop 2 position, %",
+   "group": "Poster · gradient stops",
+   "type": "range",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "options": null,
+   "default": 18
+  },
+  {
+   "id": "bg.stop3.color",
+   "label": "Stop 3 colour",
+   "group": "Poster · gradient stops",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#94b3c3"
+  },
+  {
+   "id": "bg.stop3.pos",
+   "label": "Stop 3 position, %",
+   "group": "Poster · gradient stops",
+   "type": "range",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "options": null,
+   "default": 74
+  },
+  {
+   "id": "bg.stop4.color",
+   "label": "Stop 4 colour",
+   "group": "Poster · gradient stops",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ff8f44"
+  },
+  {
+   "id": "bg.stop4.pos",
+   "label": "Stop 4 position, %",
+   "group": "Poster · gradient stops",
+   "type": "range",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "options": null,
+   "default": 100
+  },
+  {
+   "id": "gridMode",
+   "label": "Grid",
+   "group": "Poster",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "lines",
+     "label": "Lines"
+    },
+    {
+     "value": "dots",
+     "label": "Dots"
+    },
+    {
+     "value": "none",
+     "label": "None"
+    }
+   ],
+   "default": "none"
+  },
+  {
+   "id": "gridColor",
+   "label": "Grid colour",
+   "group": "Poster",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#9a9a9a"
+  },
+  {
+   "id": "gridWidth",
+   "label": "Grid line width",
+   "group": "Poster",
+   "type": "range",
+   "min": 0.5,
+   "max": 8,
+   "step": 0.5,
+   "options": null,
+   "default": 2
+  },
+  {
+   "id": "gridSize",
+   "label": "Grid cell size",
+   "group": "Poster",
+   "type": "range",
+   "min": 20,
+   "max": 400,
+   "step": 1,
+   "options": null,
+   "default": 108.65
+  },
+  {
+   "id": "stageColor",
+   "label": "Canvas background colour",
+   "group": "Poster",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#1f1d1c"
+  },
+  {
+   "id": "palette",
+   "label": "Palette",
+   "group": "Nodes",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "poster",
+     "label": "poster"
+    },
+    {
+     "value": "autumn",
+     "label": "autumn"
+    },
+    {
+     "value": "night",
+     "label": "night"
+    },
+    {
+     "value": "sunset",
+     "label": "sunset"
+    },
+    {
+     "value": "dusk",
+     "label": "dusk"
+    }
+   ],
+   "default": "dusk"
+  },
+  {
+   "id": "paletteColor1",
+   "label": "Palette colour 1",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#704417"
+  },
+  {
+   "id": "paletteColor2",
+   "label": "Palette colour 2",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#383838"
+  },
+  {
+   "id": "paletteColor3",
+   "label": "Palette colour 3",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ebea4e"
+  },
+  {
+   "id": "paletteColor4",
+   "label": "Palette colour 4",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#94b3c3"
+  },
+  {
+   "id": "paletteColor5",
+   "label": "Palette colour 5",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#e99760"
+  },
+  {
+   "id": "paletteColor6",
+   "label": "Palette colour 6",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#f3f14d"
+  },
+  {
+   "id": "allNodesColor",
+   "label": "Colour of all nodes",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#704417"
+  },
+  {
+   "id": "allNodesShape",
+   "label": "Shape of all nodes",
+   "group": "Nodes",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "circle",
+     "label": "Circles"
+    },
+    {
+     "value": "square",
+     "label": "Squares"
+    },
+    {
+     "value": "ring",
+     "label": "Rings"
+    },
+    {
+     "value": "triangle",
+     "label": "Triangles"
+    },
+    {
+     "value": "diamond",
+     "label": "Diamonds"
+    },
+    {
+     "value": "hexagon",
+     "label": "Hexagons"
+    },
+    {
+     "value": "star",
+     "label": "Stars"
+    },
+    {
+     "value": "cross",
+     "label": "Crosses"
+    },
+    {
+     "value": "half",
+     "label": "Half-circles"
+    },
+    {
+     "value": "leaf",
+     "label": "Leaves"
+    }
+   ],
+   "default": "circle"
+  },
+  {
+   "id": "allNodesSize",
+   "label": "Size of all nodes",
+   "group": "Nodes",
+   "type": "range",
+   "min": 0.2,
+   "max": 2,
+   "step": 0.05,
+   "options": null,
+   "default": 0.5524
+  },
+  {
+   "id": "shapeMode",
+   "label": "Node shapes (rule)",
+   "group": "Nodes",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "mixed",
+     "label": "Per node"
+    },
+    {
+     "value": "circle",
+     "label": "Circles"
+    },
+    {
+     "value": "square",
+     "label": "Squares"
+    },
+    {
+     "value": "ring",
+     "label": "Rings"
+    },
+    {
+     "value": "triangle",
+     "label": "Triangles"
+    },
+    {
+     "value": "diamond",
+     "label": "Diamonds"
+    },
+    {
+     "value": "hexagon",
+     "label": "Hexagons"
+    },
+    {
+     "value": "star",
+     "label": "Stars"
+    },
+    {
+     "value": "cross",
+     "label": "Crosses"
+    },
+    {
+     "value": "half",
+     "label": "Half-circles"
+    },
+    {
+     "value": "leaf",
+     "label": "Leaves"
+    },
+    {
+     "value": "bird",
+     "label": "Birds"
+    },
+    {
+     "value": "depth",
+     "label": "By depth"
+    },
+    {
+     "value": "value",
+     "label": "By value"
+    }
+   ],
+   "default": "mixed"
+  },
+  {
+   "id": "fillMode",
+   "label": "Fill",
+   "group": "Nodes",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "solid",
+     "label": "Solid"
+    },
+    {
+     "value": "outline",
+     "label": "Outline only"
+    },
+    {
+     "value": "duo",
+     "label": "Translucent"
+    },
+    {
+     "value": "gradient",
+     "label": "Gradient"
+    }
+   ],
+   "default": "solid"
+  },
+  {
+   "id": "gradEnd",
+   "label": "Gradient end colour",
+   "group": "Nodes",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ffffff"
+  },
+  {
+   "id": "gradAngle",
+   "label": "Gradient angle",
+   "group": "Nodes",
+   "type": "range",
+   "min": 0,
+   "max": 360,
+   "step": 5,
+   "options": null,
+   "default": 180
+  },
+  {
+   "id": "newNodeSize",
+   "label": "New node size",
+   "group": "Nodes",
+   "type": "range",
+   "min": 0.2,
+   "max": 1.6,
+   "step": 0.05,
+   "options": null,
+   "default": 0.5524
+  },
+  {
+   "id": "highlightBranch",
+   "label": "Highlight branch on hover",
+   "group": "Nodes",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "snap",
+   "label": "Snap step",
+   "group": "Nodes",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "1",
+     "label": "Grid"
+    },
+    {
+     "value": "0.5",
+     "label": "Half"
+    },
+    {
+     "value": "0.25",
+     "label": "Quarter"
+    },
+    {
+     "value": "0",
+     "label": "Free"
+    }
+   ],
+   "default": "0"
+  },
+  {
+   "id": "showLines",
+   "label": "Show lines",
+   "group": "Lines",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "edge",
+   "label": "Line shape",
+   "group": "Lines",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "curve",
+     "label": "Smooth"
+    },
+    {
+     "value": "straight",
+     "label": "Straight"
+    },
+    {
+     "value": "step",
+     "label": "Stepped"
+    },
+    {
+     "value": "wave",
+     "label": "Wavy"
+    },
+    {
+     "value": "zigzag",
+     "label": "Zigzag"
+    },
+    {
+     "value": "arc",
+     "label": "Arcs"
+    }
+   ],
+   "default": "straight"
+  },
+  {
+   "id": "dash",
+   "label": "Stroke",
+   "group": "Lines",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "solid",
+     "label": "Solid"
+    },
+    {
+     "value": "dashed",
+     "label": "Dashed"
+    },
+    {
+     "value": "even",
+     "label": "Even dashes"
+    },
+    {
+     "value": "dotted",
+     "label": "Dotted"
+    }
+   ],
+   "default": "solid"
+  },
+  {
+   "id": "lineWidth",
+   "label": "Line width",
+   "group": "Lines",
+   "type": "range",
+   "min": 1,
+   "max": 12,
+   "step": 0.5,
+   "options": null,
+   "default": 5
+  },
+  {
+   "id": "lineColorMode",
+   "label": "Line colour source",
+   "group": "Lines",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "theme",
+     "label": "Theme"
+    },
+    {
+     "value": "node",
+     "label": "Follow nodes"
+    },
+    {
+     "value": "custom",
+     "label": "Custom"
+    }
+   ],
+   "default": "theme"
+  },
+  {
+   "id": "lineColor",
+   "label": "Custom line colour",
+   "group": "Lines",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#383838"
+  },
+  {
+   "id": "arrows",
+   "label": "Arrowheads",
+   "group": "Lines",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "arrowSize",
+   "label": "Arrow size",
+   "group": "Lines",
+   "type": "range",
+   "min": 0.5,
+   "max": 3,
+   "step": 0.1,
+   "options": null,
+   "default": 1
+  },
+  {
+   "id": "waveAmp",
+   "label": "Wave and zigzag amplitude",
+   "group": "Lines",
+   "type": "range",
+   "min": 0.05,
+   "max": 0.45,
+   "step": 0.01,
+   "options": null,
+   "default": 0.16
+  },
+  {
+   "id": "lineOverNodes",
+   "label": "Lines above nodes",
+   "group": "Lines",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "showLabels",
+   "label": "Show node labels",
+   "group": "Labels",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "labelPos",
+   "label": "Label position",
+   "group": "Labels",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "br",
+     "label": "Below right"
+    },
+    {
+     "value": "r",
+     "label": "Right"
+    },
+    {
+     "value": "b",
+     "label": "Below"
+    },
+    {
+     "value": "t",
+     "label": "Above"
+    },
+    {
+     "value": "c",
+     "label": "Inside the node"
+    }
+   ],
+   "default": "br"
+  },
+  {
+   "id": "labelSize",
+   "label": "Label size",
+   "group": "Labels",
+   "type": "range",
+   "min": 0.6,
+   "max": 2.4,
+   "step": 0.1,
+   "options": null,
+   "default": 1
+  },
+  {
+   "id": "labelColor",
+   "label": "Label colour",
+   "group": "Labels",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#212121"
+  },
+  {
+   "id": "unit",
+   "label": "Value unit",
+   "group": "Labels",
+   "type": "text",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": ""
+  },
+  {
+   "id": "sizeByValue",
+   "label": "Node size follows value",
+   "group": "Labels",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "captionOn",
+   "label": "Show caption (full canvas)",
+   "group": "Labels",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "captionTitle",
+   "label": "Caption title",
+   "group": "Labels",
+   "type": "text",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": ""
+  },
+  {
+   "id": "captionText",
+   "label": "Caption text",
+   "group": "Labels",
+   "type": "text",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": ""
+  },
+  {
+   "id": "layoutCols",
+   "label": "Layout columns",
+   "group": "Layout",
+   "type": "number",
+   "min": 3,
+   "max": 12,
+   "step": 1,
+   "options": null,
+   "default": 9.94
+  },
+  {
+   "id": "layoutRows",
+   "label": "Layout rows",
+   "group": "Layout",
+   "type": "number",
+   "min": 3,
+   "max": 12,
+   "step": 1,
+   "options": null,
+   "default": 12.43
+  },
+  {
+   "id": "seed",
+   "label": "Generator seed",
+   "group": "Layout",
+   "type": "number",
+   "min": 1,
+   "max": 99999,
+   "step": 1,
+   "options": null,
+   "default": 7
+  },
+  {
+   "id": "count",
+   "label": "Generator nodes",
+   "group": "Layout",
+   "type": "range",
+   "min": 5,
+   "max": 40,
+   "step": 1,
+   "options": null,
+   "default": 14
+  },
+  {
+   "id": "branching",
+   "label": "Generator branching",
+   "group": "Layout",
+   "type": "range",
+   "min": 0,
+   "max": 1,
+   "step": 0.05,
+   "options": null,
+   "default": 0.55
+  },
+  {
+   "id": "series",
+   "label": "Number series (comma-separated)",
+   "group": "Layout",
+   "type": "textarea",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "4, 9, 6, 14, 11, 17, 8, 12"
+  },
+  {
+   "id": "animation",
+   "label": "Animation",
+   "group": "Motion",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "draw",
+     "label": "Draw path"
+    },
+    {
+     "value": "pulse",
+     "label": "Pulse"
+    },
+    {
+     "value": "drift",
+     "label": "Drift"
+    },
+    {
+     "value": "fall",
+     "label": "Leaf fall"
+    },
+    {
+     "value": "none",
+     "label": "None"
+    }
+   ],
+   "default": "draw"
+  },
+  {
+   "id": "speed",
+   "label": "Speed",
+   "group": "Motion",
+   "type": "range",
+   "min": 0.25,
+   "max": 3,
+   "step": 0.05,
+   "options": null,
+   "default": 1
+  },
+  {
+   "id": "loop",
+   "label": "Loop",
+   "group": "Motion",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "animateText",
+   "label": "Animate poster text",
+   "group": "Motion",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "progress",
+   "label": "Timeline position",
+   "group": "Motion",
+   "type": "range",
+   "min": 0,
+   "max": 1,
+   "step": 0.001,
+   "options": null,
+   "default": 0.135
+  },
+  {
+   "id": "title.text",
+   "label": "Text",
+   "group": "Text · title",
+   "type": "textarea",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "Bird\nMigration\nMap"
+  },
+  {
+   "id": "title.font",
+   "label": "Font",
+   "group": "Text · title",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "serif",
+     "label": "Averia Serif Libre"
+    },
+    {
+     "value": "sans",
+     "label": "Arial"
+    },
+    {
+     "value": "cond",
+     "label": "Roboto Condensed"
+    },
+    {
+     "value": "gothic",
+     "label": "Special Gothic Condensed One"
+    }
+   ],
+   "default": "serif"
+  },
+  {
+   "id": "title.size",
+   "label": "Size",
+   "group": "Text · title",
+   "type": "range",
+   "min": 8,
+   "max": 600,
+   "step": 1,
+   "options": null,
+   "default": 382.011
+  },
+  {
+   "id": "title.color",
+   "label": "Colour",
+   "group": "Text · title",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#e99760"
+  },
+  {
+   "id": "title.bold",
+   "label": "Bold",
+   "group": "Text · title",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "title.upper",
+   "label": "UPPERCASE",
+   "group": "Text · title",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "title.align",
+   "label": "Align",
+   "group": "Text · title",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "start",
+     "label": "Left"
+    },
+    {
+     "value": "middle",
+     "label": "Centre"
+    }
+   ],
+   "default": "middle"
+  },
+  {
+   "id": "title.letterSpacing",
+   "label": "Letter spacing, px",
+   "group": "Text · title",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 0.1,
+   "options": null,
+   "default": -34.38
+  },
+  {
+   "id": "title.lineHeight",
+   "label": "Line height ×",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0.4,
+   "max": 3,
+   "step": 0.02,
+   "options": null,
+   "default": 0.76
+  },
+  {
+   "id": "title.italicRow",
+   "label": "Italic row (0 = none)",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": 20,
+   "step": 1,
+   "options": null,
+   "default": 2
+  },
+  {
+   "id": "title.x",
+   "label": "X, px",
+   "group": "Text · title",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 515.34
+  },
+  {
+   "id": "title.y",
+   "label": "Y, px",
+   "group": "Text · title",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 197
+  },
+  {
+   "id": "title.layer",
+   "label": "Layer",
+   "group": "Text · title",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "front",
+     "label": "Above the graph"
+    },
+    {
+     "value": "back",
+     "label": "Behind the graph"
+    }
+   ],
+   "default": "back"
+  },
+  {
+   "id": "title.animation",
+   "label": "Animation",
+   "group": "Text · title",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "none",
+     "label": "None"
+    },
+    {
+     "value": "fade",
+     "label": "Fade in"
+    },
+    {
+     "value": "rise",
+     "label": "Rise and fade"
+    },
+    {
+     "value": "slide",
+     "label": "Slide in from left"
+    },
+    {
+     "value": "wipe",
+     "label": "Wipe (left to right)"
+    },
+    {
+     "value": "type",
+     "label": "Typewriter"
+    }
+   ],
+   "default": "rise"
+  },
+  {
+   "id": "title.delay",
+   "label": "Delay, s",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0.45
+  },
+  {
+   "id": "title.speed",
+   "label": "Speed, characters/s",
+   "group": "Text · title",
+   "type": "number",
+   "min": 5,
+   "max": null,
+   "step": 5,
+   "options": null,
+   "default": 60
+  },
+  {
+   "id": "title.stagger",
+   "label": "Delay between rows, s",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0.3
+  },
+  {
+   "id": "title.sync",
+   "label": "Appear when the path reaches it",
+   "group": "Text · title",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "title.box",
+   "label": "Plate behind the text",
+   "group": "Text · title",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "title.box.color",
+   "label": "Plate colour",
+   "group": "Text · title",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#f3f14d"
+  },
+  {
+   "id": "title.box.gradient",
+   "label": "Plate gradient",
+   "group": "Text · title",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "title.box.color2",
+   "label": "Plate gradient colour 2",
+   "group": "Text · title",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ffffff"
+  },
+  {
+   "id": "title.box.angle",
+   "label": "Plate gradient angle",
+   "group": "Text · title",
+   "type": "range",
+   "min": 0,
+   "max": 360,
+   "step": 5,
+   "options": null,
+   "default": 180
+  },
+  {
+   "id": "title.box.padX",
+   "label": "Plate padding left/right",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 18
+  },
+  {
+   "id": "title.box.padY",
+   "label": "Plate padding top/bottom",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 12
+  },
+  {
+   "id": "title.box.minWidth",
+   "label": "Plate minimum width, px",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "title.box.radius",
+   "label": "Plate corner radius, px",
+   "group": "Text · title",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "title.box.opacity",
+   "label": "Plate opacity",
+   "group": "Text · title",
+   "type": "range",
+   "min": 0,
+   "max": 1,
+   "step": 0.05,
+   "options": null,
+   "default": 1
+  },
+  {
+   "id": "subtitle.text",
+   "label": "Text",
+   "group": "Text · subtitle",
+   "type": "textarea",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "Greater spotted\neagles tracked by\nsatellite\ntransmitters"
+  },
+  {
+   "id": "subtitle.font",
+   "label": "Font",
+   "group": "Text · subtitle",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "serif",
+     "label": "Averia Serif Libre"
+    },
+    {
+     "value": "sans",
+     "label": "Arial"
+    },
+    {
+     "value": "cond",
+     "label": "Roboto Condensed"
+    },
+    {
+     "value": "gothic",
+     "label": "Special Gothic Condensed One"
+    }
+   ],
+   "default": "sans"
+  },
+  {
+   "id": "subtitle.size",
+   "label": "Size",
+   "group": "Text · subtitle",
+   "type": "range",
+   "min": 8,
+   "max": 600,
+   "step": 1,
+   "options": null,
+   "default": 30
+  },
+  {
+   "id": "subtitle.color",
+   "label": "Colour",
+   "group": "Text · subtitle",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#212121"
+  },
+  {
+   "id": "subtitle.bold",
+   "label": "Bold",
+   "group": "Text · subtitle",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "subtitle.upper",
+   "label": "UPPERCASE",
+   "group": "Text · subtitle",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "subtitle.align",
+   "label": "Align",
+   "group": "Text · subtitle",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "start",
+     "label": "Left"
+    },
+    {
+     "value": "middle",
+     "label": "Centre"
+    }
+   ],
+   "default": "start"
+  },
+  {
+   "id": "subtitle.letterSpacing",
+   "label": "Letter spacing, px",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 0.1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "subtitle.lineHeight",
+   "label": "Line height ×",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0.4,
+   "max": 3,
+   "step": 0.02,
+   "options": null,
+   "default": 0.8
+  },
+  {
+   "id": "subtitle.italicRow",
+   "label": "Italic row (0 = none)",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": 20,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "subtitle.x",
+   "label": "X, px",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 26
+  },
+  {
+   "id": "subtitle.y",
+   "label": "Y, px",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 870
+  },
+  {
+   "id": "subtitle.layer",
+   "label": "Layer",
+   "group": "Text · subtitle",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "front",
+     "label": "Above the graph"
+    },
+    {
+     "value": "back",
+     "label": "Behind the graph"
+    }
+   ],
+   "default": "front"
+  },
+  {
+   "id": "subtitle.animation",
+   "label": "Animation",
+   "group": "Text · subtitle",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "none",
+     "label": "None"
+    },
+    {
+     "value": "fade",
+     "label": "Fade in"
+    },
+    {
+     "value": "rise",
+     "label": "Rise and fade"
+    },
+    {
+     "value": "slide",
+     "label": "Slide in from left"
+    },
+    {
+     "value": "wipe",
+     "label": "Wipe (left to right)"
+    },
+    {
+     "value": "type",
+     "label": "Typewriter"
+    }
+   ],
+   "default": "wipe"
+  },
+  {
+   "id": "subtitle.delay",
+   "label": "Delay, s",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0.1
+  },
+  {
+   "id": "subtitle.speed",
+   "label": "Speed, characters/s",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 5,
+   "max": null,
+   "step": 5,
+   "options": null,
+   "default": 90
+  },
+  {
+   "id": "subtitle.stagger",
+   "label": "Delay between rows, s",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "subtitle.sync",
+   "label": "Appear when the path reaches it",
+   "group": "Text · subtitle",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "subtitle.box",
+   "label": "Plate behind the text",
+   "group": "Text · subtitle",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "subtitle.box.color",
+   "label": "Plate colour",
+   "group": "Text · subtitle",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#f3f14d"
+  },
+  {
+   "id": "subtitle.box.gradient",
+   "label": "Plate gradient",
+   "group": "Text · subtitle",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "subtitle.box.color2",
+   "label": "Plate gradient colour 2",
+   "group": "Text · subtitle",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ffffff"
+  },
+  {
+   "id": "subtitle.box.angle",
+   "label": "Plate gradient angle",
+   "group": "Text · subtitle",
+   "type": "range",
+   "min": 0,
+   "max": 360,
+   "step": 5,
+   "options": null,
+   "default": 180
+  },
+  {
+   "id": "subtitle.box.padX",
+   "label": "Plate padding left/right",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 18
+  },
+  {
+   "id": "subtitle.box.padY",
+   "label": "Plate padding top/bottom",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 12
+  },
+  {
+   "id": "subtitle.box.minWidth",
+   "label": "Plate minimum width, px",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "subtitle.box.radius",
+   "label": "Plate corner radius, px",
+   "group": "Text · subtitle",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "subtitle.box.opacity",
+   "label": "Plate opacity",
+   "group": "Text · subtitle",
+   "type": "range",
+   "min": 0,
+   "max": 1,
+   "step": 0.05,
+   "options": null,
+   "default": 1
+  },
+  {
+   "id": "footer.text",
+   "label": "Text",
+   "group": "Text · footer",
+   "type": "textarea",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "This infographic tool can be used to visualize customer journeys,\ndependency or process trees, organizational structures, project maps, and\nroutes or logistics."
+  },
+  {
+   "id": "footer.font",
+   "label": "Font",
+   "group": "Text · footer",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "serif",
+     "label": "Averia Serif Libre"
+    },
+    {
+     "value": "sans",
+     "label": "Arial"
+    },
+    {
+     "value": "cond",
+     "label": "Roboto Condensed"
+    },
+    {
+     "value": "gothic",
+     "label": "Special Gothic Condensed One"
+    }
+   ],
+   "default": "cond"
+  },
+  {
+   "id": "footer.size",
+   "label": "Size",
+   "group": "Text · footer",
+   "type": "range",
+   "min": 8,
+   "max": 600,
+   "step": 1,
+   "options": null,
+   "default": 26.62
+  },
+  {
+   "id": "footer.color",
+   "label": "Colour",
+   "group": "Text · footer",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#212121"
+  },
+  {
+   "id": "footer.bold",
+   "label": "Bold",
+   "group": "Text · footer",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "footer.upper",
+   "label": "UPPERCASE",
+   "group": "Text · footer",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "footer.align",
+   "label": "Align",
+   "group": "Text · footer",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "start",
+     "label": "Left"
+    },
+    {
+     "value": "middle",
+     "label": "Centre"
+    }
+   ],
+   "default": "start"
+  },
+  {
+   "id": "footer.letterSpacing",
+   "label": "Letter spacing, px",
+   "group": "Text · footer",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 0.1,
+   "options": null,
+   "default": -1.06
+  },
+  {
+   "id": "footer.lineHeight",
+   "label": "Line height ×",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0.4,
+   "max": 3,
+   "step": 0.02,
+   "options": null,
+   "default": 1.172
+  },
+  {
+   "id": "footer.italicRow",
+   "label": "Italic row (0 = none)",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": 20,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "footer.x",
+   "label": "X, px",
+   "group": "Text · footer",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 26
+  },
+  {
+   "id": "footer.y",
+   "label": "Y, px",
+   "group": "Text · footer",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 1234
+  },
+  {
+   "id": "footer.layer",
+   "label": "Layer",
+   "group": "Text · footer",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "front",
+     "label": "Above the graph"
+    },
+    {
+     "value": "back",
+     "label": "Behind the graph"
+    }
+   ],
+   "default": "front"
+  },
+  {
+   "id": "footer.animation",
+   "label": "Animation",
+   "group": "Text · footer",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "none",
+     "label": "None"
+    },
+    {
+     "value": "fade",
+     "label": "Fade in"
+    },
+    {
+     "value": "rise",
+     "label": "Rise and fade"
+    },
+    {
+     "value": "slide",
+     "label": "Slide in from left"
+    },
+    {
+     "value": "wipe",
+     "label": "Wipe (left to right)"
+    },
+    {
+     "value": "type",
+     "label": "Typewriter"
+    }
+   ],
+   "default": "wipe"
+  },
+  {
+   "id": "footer.delay",
+   "label": "Delay, s",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0.8
+  },
+  {
+   "id": "footer.speed",
+   "label": "Speed, characters/s",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 5,
+   "max": null,
+   "step": 5,
+   "options": null,
+   "default": 170
+  },
+  {
+   "id": "footer.stagger",
+   "label": "Delay between rows, s",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "footer.sync",
+   "label": "Appear when the path reaches it",
+   "group": "Text · footer",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "footer.box",
+   "label": "Plate behind the text",
+   "group": "Text · footer",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "footer.box.color",
+   "label": "Plate colour",
+   "group": "Text · footer",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#f3f14d"
+  },
+  {
+   "id": "footer.box.gradient",
+   "label": "Plate gradient",
+   "group": "Text · footer",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "footer.box.color2",
+   "label": "Plate gradient colour 2",
+   "group": "Text · footer",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ffffff"
+  },
+  {
+   "id": "footer.box.angle",
+   "label": "Plate gradient angle",
+   "group": "Text · footer",
+   "type": "range",
+   "min": 0,
+   "max": 360,
+   "step": 5,
+   "options": null,
+   "default": 180
+  },
+  {
+   "id": "footer.box.padX",
+   "label": "Plate padding left/right",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 18
+  },
+  {
+   "id": "footer.box.padY",
+   "label": "Plate padding top/bottom",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 12
+  },
+  {
+   "id": "footer.box.minWidth",
+   "label": "Plate minimum width, px",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "footer.box.radius",
+   "label": "Plate corner radius, px",
+   "group": "Text · footer",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "footer.box.opacity",
+   "label": "Plate opacity",
+   "group": "Text · footer",
+   "type": "range",
+   "min": 0,
+   "max": 1,
+   "step": 0.05,
+   "options": null,
+   "default": 1
+  },
+  {
+   "id": "tag.text",
+   "label": "Text",
+   "group": "Text · tag",
+   "type": "textarea",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "Data that exists"
+  },
+  {
+   "id": "tag.font",
+   "label": "Font",
+   "group": "Text · tag",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "serif",
+     "label": "Averia Serif Libre"
+    },
+    {
+     "value": "sans",
+     "label": "Arial"
+    },
+    {
+     "value": "cond",
+     "label": "Roboto Condensed"
+    },
+    {
+     "value": "gothic",
+     "label": "Special Gothic Condensed One"
+    }
+   ],
+   "default": "cond"
+  },
+  {
+   "id": "tag.size",
+   "label": "Size",
+   "group": "Text · tag",
+   "type": "range",
+   "min": 8,
+   "max": 600,
+   "step": 1,
+   "options": null,
+   "default": 26.62
+  },
+  {
+   "id": "tag.color",
+   "label": "Colour",
+   "group": "Text · tag",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#212121"
+  },
+  {
+   "id": "tag.bold",
+   "label": "Bold",
+   "group": "Text · tag",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "tag.upper",
+   "label": "UPPERCASE",
+   "group": "Text · tag",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "tag.align",
+   "label": "Align",
+   "group": "Text · tag",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "start",
+     "label": "Left"
+    },
+    {
+     "value": "middle",
+     "label": "Centre"
+    }
+   ],
+   "default": "start"
+  },
+  {
+   "id": "tag.letterSpacing",
+   "label": "Letter spacing, px",
+   "group": "Text · tag",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 0.1,
+   "options": null,
+   "default": -1.06
+  },
+  {
+   "id": "tag.lineHeight",
+   "label": "Line height ×",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0.4,
+   "max": 3,
+   "step": 0.02,
+   "options": null,
+   "default": 1.172
+  },
+  {
+   "id": "tag.italicRow",
+   "label": "Italic row (0 = none)",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": 20,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "tag.x",
+   "label": "X, px",
+   "group": "Text · tag",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 18
+  },
+  {
+   "id": "tag.y",
+   "label": "Y, px",
+   "group": "Text · tag",
+   "type": "number",
+   "min": null,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 13
+  },
+  {
+   "id": "tag.layer",
+   "label": "Layer",
+   "group": "Text · tag",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "front",
+     "label": "Above the graph"
+    },
+    {
+     "value": "back",
+     "label": "Behind the graph"
+    }
+   ],
+   "default": "front"
+  },
+  {
+   "id": "tag.animation",
+   "label": "Animation",
+   "group": "Text · tag",
+   "type": "select",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": [
+    {
+     "value": "none",
+     "label": "None"
+    },
+    {
+     "value": "fade",
+     "label": "Fade in"
+    },
+    {
+     "value": "rise",
+     "label": "Rise and fade"
+    },
+    {
+     "value": "slide",
+     "label": "Slide in from left"
+    },
+    {
+     "value": "wipe",
+     "label": "Wipe (left to right)"
+    },
+    {
+     "value": "type",
+     "label": "Typewriter"
+    }
+   ],
+   "default": "slide"
+  },
+  {
+   "id": "tag.delay",
+   "label": "Delay, s",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "tag.speed",
+   "label": "Speed, characters/s",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 5,
+   "max": null,
+   "step": 5,
+   "options": null,
+   "default": 60
+  },
+  {
+   "id": "tag.stagger",
+   "label": "Delay between rows, s",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 0.05,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "tag.sync",
+   "label": "Appear when the path reaches it",
+   "group": "Text · tag",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "tag.box",
+   "label": "Plate behind the text",
+   "group": "Text · tag",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": true
+  },
+  {
+   "id": "tag.box.color",
+   "label": "Plate colour",
+   "group": "Text · tag",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#f3f14d"
+  },
+  {
+   "id": "tag.box.gradient",
+   "label": "Plate gradient",
+   "group": "Text · tag",
+   "type": "checkbox",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": false
+  },
+  {
+   "id": "tag.box.color2",
+   "label": "Plate gradient colour 2",
+   "group": "Text · tag",
+   "type": "color",
+   "min": null,
+   "max": null,
+   "step": null,
+   "options": null,
+   "default": "#ffffff"
+  },
+  {
+   "id": "tag.box.angle",
+   "label": "Plate gradient angle",
+   "group": "Text · tag",
+   "type": "range",
+   "min": 0,
+   "max": 360,
+   "step": 5,
+   "options": null,
+   "default": 180
+  },
+  {
+   "id": "tag.box.padX",
+   "label": "Plate padding left/right",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 18
+  },
+  {
+   "id": "tag.box.padY",
+   "label": "Plate padding top/bottom",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 13
+  },
+  {
+   "id": "tag.box.minWidth",
+   "label": "Plate minimum width, px",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 434
+  },
+  {
+   "id": "tag.box.radius",
+   "label": "Plate corner radius, px",
+   "group": "Text · tag",
+   "type": "number",
+   "min": 0,
+   "max": null,
+   "step": 1,
+   "options": null,
+   "default": 0
+  },
+  {
+   "id": "tag.box.opacity",
+   "label": "Plate opacity",
+   "group": "Text · tag",
+   "type": "range",
+   "min": 0,
+   "max": 1,
+   "step": 0.05,
+   "options": null,
+   "default": 1
+  }
+ ],
+ "actions": [
+  {
+   "id": "act_replay",
+   "action": "replay",
+   "label": "Replay"
+  },
+  {
+   "id": "act_togglePlay",
+   "action": "togglePlay",
+   "label": "Play / pause"
+  },
+  {
+   "id": "act_play",
+   "action": "play",
+   "label": "Play"
+  },
+  {
+   "id": "act_pause",
+   "action": "pause",
+   "label": "Pause"
+  },
+  {
+   "id": "act_undo",
+   "action": "undo",
+   "label": "Undo"
+  },
+  {
+   "id": "act_redo",
+   "action": "redo",
+   "label": "Redo"
+  },
+  {
+   "id": "act_clearAll",
+   "action": "clearAll",
+   "label": "Clear all nodes"
+  },
+  {
+   "id": "act_generate",
+   "action": "generate",
+   "label": "Generate a graph from the seed"
+  },
+  {
+   "id": "act_newSeed",
+   "action": "newSeed",
+   "label": "New random seed and generate"
+  },
+  {
+   "id": "act_relayout",
+   "action": "relayout",
+   "label": "Auto layout (argument: tree, radial, value, spiral)"
+  },
+  {
+   "id": "act_jitter",
+   "action": "jitter",
+   "label": "Jitter positions"
+  },
+  {
+   "id": "act_flipH",
+   "action": "flipH",
+   "label": "Mirror horizontally"
+  },
+  {
+   "id": "act_flipV",
+   "action": "flipV",
+   "label": "Mirror vertically"
+  },
+  {
+   "id": "act_recolor",
+   "action": "recolor",
+   "label": "Recolour nodes (argument: value, depth, branch)"
+  },
+  {
+   "id": "act_buildSeries",
+   "action": "buildSeries",
+   "label": "Build nodes from the number series"
+  },
+  {
+   "id": "act_loadTemplate",
+   "action": "loadTemplate",
+   "label": "Load an example (argument: poster, poster-v1, autumn, constellation, tree, routes, blank)"
+  },
+  {
+   "id": "act_applyLook",
+   "action": "applyLook",
+   "label": "Apply a look (argument: dots, squares, geometry, outline, waves, dashed, leaves)"
+  },
+  {
+   "id": "act_addText",
+   "action": "addText",
+   "label": "Add a text block"
+  },
+  {
+   "id": "act_duplicateText",
+   "action": "duplicateText",
+   "label": "Duplicate the selected text block"
+  },
+  {
+   "id": "act_deleteText",
+   "action": "deleteText",
+   "label": "Delete a text block (argument: control id)"
+  },
+  {
+   "id": "act_blankPoster",
+   "action": "blankPoster",
+   "label": "Start a blank poster"
+  },
+  {
+   "id": "act_bgAddStop",
+   "action": "bgAddStop",
+   "label": "Add a background gradient stop"
+  },
+  {
+   "id": "act_bgRemoveStop",
+   "action": "bgRemoveStop",
+   "label": "Remove the last background gradient stop"
+  },
+  {
+   "id": "act_bgPreset",
+   "action": "bgPreset",
+   "label": "Background preset (argument: sunset, sky, night, paper, mint, mono)"
+  }
+ ]
+}
